@@ -1,46 +1,37 @@
 {
   "display": {
-    "title": "zombie-attack",
-    "favicon": "favicon_asset"
-  },
-  "contact": {
-    "name": "author-name",
-    "email": ""
+    "title": "Zombies",
+    "favicon": "favicon_asset",
+    "navmapThumbnail": "scene-thumbnail.png"
   },
   "owner": "",
-  "scene": {
-    "parcels": [
-      "0,1","1,1",
-      "0,0","1,0"
-    ],
-    "base": "0,0"
-  },
-  "communications": {
-    "type": "webrtc",
-    "signalling": "https://signalling-01.decentraland.org"
-  },
-  "policy": {
-    "contentRating": "E",
-    "fly": true,
-    "voiceEnabled": true,
-    "blacklist": []
+  "contact": {
+    "name": "Yannakis",
+    "email": ""
   },
   "main": "bin/game.js",
   "tags": [],
-  "spawnPoints": [
-    {
-      "name": "spawn1",
-      "default": true,
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "cameraTarget": {
-        "x": 8,
-        "y": 1,
-        "z": 8
-      }
+  "scene": {
+    "parcels": [
+      "0,0",
+      "0,1",
+      "1,0",
+      "1,1"
+    ],
+    "base": "0,0"
+  },
+  "source": {
+    "version": 1,
+    "origin": "builder",
+    "projectId": "b99c0491-b4ea-4646-b13d-f1b4ec0d33e5",
+    "point": {
+      "x": 0,
+      "y": 0
+    },
+    "rotation": "east",
+    "layout": {
+      "rows": 2,
+      "cols": 2
     }
-  ]
+  }
 }
