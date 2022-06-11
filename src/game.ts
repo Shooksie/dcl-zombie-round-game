@@ -1,22 +1,9 @@
 import GameManager from "./gameManager";
 import { Cooldown, Rifle } from "./rifle";
+import { Weapon } from "./weapon";
+import { gunShapes, WeaponsManager } from "./weaponManager";
 
 new GameManager();
-
-//Create rifle
-const gun = new Rifle(new GLTFShape("models/rifle.glb"), new Transform())
-gun.getComponent(Transform).position.set(0.15, -0.2, 0.4)
-gun.getComponent(Transform).rotation = Quaternion.Euler(-5, 0, 0)
-gun.getComponent(Transform).scale.set(.5 , .5 , .5)
-gun.setParent(Attachable.FIRST_PERSON_CAMERA)
-
-// Controls
-const input = Input.instance
-input.subscribe("BUTTON_DOWN", ActionButton.POINTER, true, (event) => {
-  if(gun.hasComponent(Cooldown)) return
-
-  gun.playFireAnim()
-})
 
 //Build scene
 const _scene = new Entity('_scene')
@@ -80,14 +67,58 @@ const zombiehouse = new Entity('zombiehouse')
 engine.addEntity(zombiehouse)
 zombiehouse.setParent(_scene)
 const transform6 = new Transform({
-  position: new Vector3(9, 0.01749774932861328, 23),
+  position: new Vector3(0, 0.01749774932861328, 23),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
+  scale: new Vector3(.9, .9, .9)
 })
 zombiehouse.addComponentOrReplace(transform6)
-const gltfShape2 = new GLTFShape("c8f1329d-2d16-4c65-ad93-733ea12aa898/Zombiehouse.glb")
+const gltfShape2 = new GLTFShape("d4ea110e-f3c2-4044-87fa-6143d6f7f67c/Zombiehouse.glb")
 gltfShape2.withCollisions = true
 gltfShape2.isPointerBlocker = true
 gltfShape2.visible = true
 zombiehouse.addComponentOrReplace(gltfShape2)
+
+// Weapon
+let weapon = new Weapon();
+
+// Cache weapons
+for (let i = 0; i < gunShapes.length; i++) {
+  const weaponCache = new Entity()
+  const weaponShape = gunShapes[i]
+  weaponCache.addComponent(new Transform({ scale: new Vector3(0, 0, 0) }))
+  weaponCache.addComponent(weaponShape)
+  engine.addEntity(weaponCache)
+}
+
+type WeaponInfo = {
+  colorIndex: number
+  position: ReadOnlyVector3
+  rotation: Quaternion
+}
+
+// Controls
+const input = Input.instance
+input.subscribe("BUTTON_DOWN", ActionButton.POINTER, true, (e) => {
+  if (e.hit && e.hit.entityId) {
+    const weaponInfo: WeaponInfo = {
+      colorIndex: WeaponsManager.weaponIndex,
+      position: e.hit.hitPoint,
+      rotation: Quaternion.FromToRotation(Vector3.Up(), e.hit.normal),
+    }
+
+  }
+})
+
+// Inputs
+input.subscribe("BUTTON_DOWN", ActionButton.PRIMARY, true, (e) => {
+  WeaponsManager.nextWeapon()
+  weapon.switchWeaponAnim(WeaponsManager.weaponIndex)
+})
+
+input.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, true, (e) => {
+  WeaponsManager.previousWeapon()
+  weapon.switchWeaponAnim(WeaponsManager.weaponIndex)
+})
+
+
 
