@@ -67,9 +67,9 @@ const zombiehouse = new Entity('zombiehouse')
 engine.addEntity(zombiehouse)
 zombiehouse.setParent(_scene)
 const transform6 = new Transform({
-  position: new Vector3(0, 0.01749774932861328, 23),
+  position: new Vector3(8, 0.010, 13.2),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(.9, .9, .9)
+  scale: new Vector3(1, 1, 1)
 })
 zombiehouse.addComponentOrReplace(transform6)
 const gltfShape2 = new GLTFShape("d4ea110e-f3c2-4044-87fa-6143d6f7f67c/Zombiehouse.glb")
