@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@dcl/eslint-config": "^1.0.1",
-    "decentraland-ecs": "latest"
+    "decentraland-ecs": "^6.11.1"
   },
   "dependencies": {
     "@dcl/ecs-scene-utils": "^1.7.5",
