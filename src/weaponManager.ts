@@ -9,14 +9,14 @@ export class WeaponsManager {
 
   public static weaponIndex: number = 0
 
-  public static nextWeapon(): void {
-    WeaponsManager.weaponIndex < gunShapes.length - 1
-      ? WeaponsManager.weaponIndex++
-      : (WeaponsManager.weaponIndex = 0)
-  }
-  public static previousWeapon(): void {
-    WeaponsManager.weaponIndex == 0
-      ? WeaponsManager.weaponIndex = gunShapes.length - 1
-      : WeaponsManager.weaponIndex--
-  }
+    public static nextWeapon(): void {
+      WeaponsManager.weaponIndex < gunShapes.length - 1
+        ? WeaponsManager.weaponIndex++
+        : (WeaponsManager.weaponIndex = 0)
+    }
+    public static previousWeapon(): void {
+      WeaponsManager.weaponIndex == 0
+        ? WeaponsManager.weaponIndex = gunShapes.length - 1
+        : WeaponsManager.weaponIndex--
+    }
 }
