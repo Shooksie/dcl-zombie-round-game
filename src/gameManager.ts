@@ -4,23 +4,23 @@ import * as ui from "@dcl/ui-scene-utils";
 import * as utils from "@dcl/ecs-scene-utils";
 import { setTimeout } from "@dcl/ecs-scene-utils";
 import { BulletMark } from './bullet'
-import {Score} from "./score";
-import {Weapon} from "./weapon";
+import { Score } from "./score";
+import { Weapon } from "./weapon";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
-import {gunShapes, WeaponsManager} from "./weaponManager";
+import { gunShapes, WeaponsManager } from "./weaponManager";
 const DELETE_TIME = 8 // In seconds
 // Score
 const scoreTen = new Score(
-    new GLTFShape('models/scoreTen.glb'),
-    new Transform()
+  new GLTFShape('models/scoreTen.glb'),
+  new Transform()
 )
 const scoreTwentyFive = new Score(
-    new GLTFShape('models/scoreTwentyFive.glb'),
-    new Transform()
+  new GLTFShape('models/scoreTwentyFive.glb'),
+  new Transform()
 )
 const scoreFifty = new Score(
-    new GLTFShape('models/scoreFifty.glb'),
-    new Transform()
+  new GLTFShape('models/scoreFifty.glb'),
+  new Transform()
 )
 
 type ZombieAttackMap = {
@@ -36,11 +36,11 @@ const getRandomInt = (max: number) => {
 }
 
 const POSITIONS = [
-    new Vector3(30.85,0,30.07),
-    new Vector3(1.81,0,5.77),
-    new Vector3(29.47,0,6.17),
-    new Vector3(1.58,0,19.91),
-    new Vector3(16.67,0,6.57),
+  new Vector3(30.85, 0, 30.07),
+  new Vector3(1.81, 0, 5.77),
+  new Vector3(29.47, 0, 6.17),
+  new Vector3(1.58, 0, 19.91),
+  new Vector3(16.67, 0, 6.57),
 ];
 
 
@@ -85,6 +85,7 @@ input.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, true, (e) => {
     weapon.previousWeapon()
   weapon.switchWeaponAnim(weapon.weaponIndex)
 })
+
 
 
 
@@ -137,15 +138,22 @@ export default class GameManager {
             position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
           })
         );
+
+        //zombie sounds
+        let clip2 = new AudioClip("sounds/attack.mp3");
+        let attackSound = new AudioSource(clip2);
+        zombie.addComponentOrReplace(attackSound);
+
         const zombieSystem = new ZombieAttack(zombie, this.camera, {
           moveSpeed: this.moveSpeed,
           rotSpeed: this.rotSpeed,
           onAttack: () => {
             log('attack')
+            attackSound.playOnce();
             this.healthBar.decrease(0.1)
             if (this.healthBar.read() <= 0) {
               ui.displayAnnouncement("You DEAD!", 5, Color4.Red(), 50);
-              movePlayerTo({ x: 22.51, y: 0, z: 13.92 }); 
+              movePlayerTo({ x: 22.51, y: 0, z: 13.92 });
               this.healthBar.set(1)
               this.removeAllZombies();
               this.round = 1;
@@ -171,8 +179,15 @@ export default class GameManager {
     engine.removeEntity(zombie);
     this.zombies = this.zombies.filter((zom) => zom.uuid !== zombie.uuid);
 
+    //zombie sounds
+    let clip = new AudioClip("sounds/die.mp3");
+    let dyingSound = new AudioSource(clip);
+    zombie.addComponent(dyingSound);
+
     if (this.zombieSystem[zombie.uuid]) {
       engine.removeSystem(this.zombieSystem[zombie.uuid]);
+      dyingSound.playOnce();
+
     }
     if (this.zombies.length === 0 && this.finishedRendering) {
       this.round++;
@@ -239,7 +254,7 @@ export default class GameManager {
         } else if (engine.entities[e.hit.entityId] !== undefined) {
           // Calculate the position of where the bullet hits relative to the target
           const targetPosition =
-              engine.entities[e.hit.entityId].getComponent(Transform).position
+            engine.entities[e.hit.entityId].getComponent(Transform).position
           const relativePosition = e.hit.hitPoint.subtract(targetPosition)
           const bulletMark = new BulletMark(bulletMarkShape, DELETE_TIME)
           bulletMark.setParent(engine.entities[e.hit.entityId]) // Make the bullet mark the child of the target so that it remains on the target

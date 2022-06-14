@@ -4,6 +4,39 @@ import * as ui from "@dcl/ui-scene-utils";
 
 const manager = new GameManager();
 
+// #1
+const myVideoClip = new VideoClip(
+  "https://player.vimeo.com/external/720437869.m3u8?s=d45f684310460260112e2a177e0ef129b4ca1243"
+);
+
+// #2
+const myVideoTexture = new VideoTexture(myVideoClip);
+myVideoTexture.play();
+myVideoTexture.loop = true;
+
+// #3
+
+const myMaterial = new Material();
+myMaterial.albedoTexture = myVideoTexture;
+myMaterial.emissiveTexture = myVideoTexture;
+myMaterial.emissiveColor = Color3.White();
+myMaterial.emissiveIntensity = 0.7;
+myMaterial.roughness = 1.0;
+
+// #4
+const screen = new Entity();
+screen.addComponent(new PlaneShape());
+screen.addComponent(
+  new Transform({
+    position: new Vector3(19.17,0.90,11.62),
+    rotation: new Quaternion(2.806811489129799e-16, 0.7033095216751099, -8.5629160651024e-8, 0.6957237720489502),
+    scale: new Vector3(.0001, .0001, .0001)
+  })
+);
+screen.addComponent(myMaterial);
+
+engine.addEntity(screen);
+
 let Inventory = new ui.CenterImage('images/UI.png', 3, true, 0, 0, 750, 750, {
   sourceHeight: 750,
   sourceWidth: 750,
