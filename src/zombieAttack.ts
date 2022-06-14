@@ -44,17 +44,18 @@ export class ZombieAttack implements ISystem {
     //   dt * this.rotSpeed
     // );
     this.transform.rotation = Quaternion.LookRotation(direction);
-    const e = await castRay(this.transform.position, this.player.position, 4);
+    const e = await castRay(this.transform.position, this.player.position, 2);
 
-    if (e.didHit && e.entity?.entityId !== this.zombie.uuid) {
+    if (e.didHit && e?.entities[0]?.entity?.entityId !== this.zombie.uuid) {
       log(e)
     }
-    if (!(e.didHit && e.entity.entityId !== this.zombie.uuid)) {
+    if (!(e.didHit && e?.entities[0]?.entity?.entityId !== this.zombie.uuid)) {
       const distance = Vector3.DistanceSquared(
           this.transform.position,
           this.player.position
       ); // Check distance squared as it's more optimized
       if (distance >= 4) {
+
         // Note: Distance is squared so a value of 4 is when the zombie is standing 2m away
         this.zombie.walk();
         const forwardVector = Vector3.Forward().rotate(this.transform.rotation);
@@ -64,7 +65,9 @@ export class ZombieAttack implements ISystem {
         this.zombie.attack();
       }
     } else {
-      log(e);
+      const forwardVector = Vector3.Backward().rotate(this.transform.rotation);
+      const increment = forwardVector.scale(dt * this.moveSpeed);
+      this.transform.translate(increment);
     }
     // Continue to move towards the player until it is within 2m away
   }

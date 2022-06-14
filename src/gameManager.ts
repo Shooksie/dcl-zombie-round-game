@@ -110,7 +110,7 @@ export default class GameManager {
     this._isPlayerInShootingArea = true;
     this.points = 0;
     this.health = 100;
-    this.counter = new ui.UICounter(0, 1000, -1000);
+    this.counter = new ui.UICounter(0, -500, 600);
     this.setUpGunShot();
     this.setUpGunShotFail();
 
