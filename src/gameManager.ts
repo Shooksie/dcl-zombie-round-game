@@ -212,7 +212,7 @@ export default class GameManager {
   }
 
   deductPoints(points) {
-    if (this.points - points > 0) {
+    if (this.points - points >= 0) {
       this.points -= points;
       this.counter.set(this.points);
     }
