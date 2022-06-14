@@ -116,7 +116,7 @@ function shotgunBox(){
   
   // Instance animation clip object
   const clipOpen2 = new AnimationState("open", { looping: false });
-  const clipClose2 = new AnimationState("close", { looping: false });
+  const clipClose2 = new AnimationState("closed", { looping: false });
   const idleClip2 = new AnimationState("idle", { looping: false });
   
   // Add animation clip to Animator component
@@ -167,7 +167,7 @@ function machinegunBox(){
   
   // Instance animation clip object
   const clipOpen2 = new AnimationState("open", { looping: false });
-  const clipClose2 = new AnimationState("close", { looping: false });
+  const clipClose2 = new AnimationState("closed", { looping: false });
   const idleClip2 = new AnimationState("idle", { looping: false });
   
   // Add animation clip to Animator component
