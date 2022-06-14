@@ -89,7 +89,7 @@ function shotgunBox(){
     scale: new Vector3(.5, .5, .5)
   })
   weaponBox.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/weaponBox.glb")
+  const gltfShape20 = new GLTFShape("models/ShotgunB.glb")
   gltfShape20.withCollisions = true
   gltfShape20.isPointerBlocker = true
   gltfShape20.visible = true
@@ -99,6 +99,7 @@ function shotgunBox(){
       (e) => {
           manager.getPoints();
           clipOpen2.play()
+          purchase.playOnce()
           setTimeout(3 * 1000, () => {
             clipClose2.play()
             //give shotgun
@@ -129,7 +130,13 @@ function shotgunBox(){
 
   //Default Animation
   idleClip2.play();
+
+  //add sound
+  let clip = new AudioClip("sounds/sale.mp3");
+  let purchase = new AudioSource(clip);
+  weaponBox.addComponent(purchase)
 }
+
 function machinegunBox(){
   const weaponBox = new Entity('weaponBox')
   engine.addEntity(weaponBox)
@@ -140,7 +147,7 @@ function machinegunBox(){
     scale: new Vector3(.5, .5, .5)
   })
   weaponBox.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/weaponBox.glb")
+  const gltfShape20 = new GLTFShape("models/RifleB.glb")
   gltfShape20.withCollisions = true
   gltfShape20.isPointerBlocker = true
   gltfShape20.visible = true
@@ -150,6 +157,7 @@ function machinegunBox(){
       (e) => {
 
           clipOpen2.play()
+          purchase.playOnce()
           setTimeout(3 * 1000, () => {
             clipClose2.play()
             //give shotgun
@@ -180,6 +188,11 @@ function machinegunBox(){
 
   //Default Animation
   idleClip2.play();
+
+    //add sound
+    let clip = new AudioClip("sounds/sale.mp3");
+    let purchase = new AudioSource(clip);
+    weaponBox.addComponent(purchase)
 }
 
 shotgunBox();
