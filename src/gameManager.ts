@@ -45,7 +45,7 @@ const POSITIONS = [
 
 
 // Weapon
-let weapon = new Weapon();
+export let weapon = new Weapon();
 
 // Cache weapons
 for (const element of gunShapes) {
@@ -188,6 +188,17 @@ export default class GameManager {
     this.gunShot.addComponent(new Transform());
     engine.addEntity(this.gunShot);
     this.gunShot.setParent(Attachable.AVATAR);
+  }
+
+  getPoints() {
+    return this.points;
+  }
+
+  deductPoints(points) {
+    if (this.points - points > 0) {
+      this.points -= points;
+      this.counter.set(this.points);
+    }
   }
 
   setUpGunShotFail() {

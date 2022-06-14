@@ -4,7 +4,7 @@ import { Cooldown, Rifle } from "./rifle";
 import { Weapon } from "./weapon";
 import { gunShapes, WeaponsManager } from "./weaponManager";
 
-new GameManager();
+const manager = new GameManager();
 
 //Build scene
 const _scene = new Entity('_scene')
@@ -97,7 +97,7 @@ function shotgunBox(){
   weaponBox.addComponent(
     new OnPointerDown(
       (e) => {
-
+          manager.getPoints();
           clipOpen2.play()
           setTimeout(3 * 1000, () => {
             clipClose2.play()
@@ -184,50 +184,3 @@ function machinegunBox(){
 
 shotgunBox();
 machinegunBox();
-
-
-
-// Weapon
-let weapon = new Weapon();
-
-// Cache weapons
-for (let i = 0; i < gunShapes.length; i++) {
-  const weaponCache = new Entity()
-  const weaponShape = gunShapes[i]
-  weaponCache.addComponent(new Transform({ scale: new Vector3(0, 0, 0) }))
-  weaponCache.addComponent(weaponShape)
-  engine.addEntity(weaponCache)
-}
-
-type WeaponInfo = {
-  colorIndex: number
-  position: ReadOnlyVector3
-  rotation: Quaternion
-}
-
-// Controls
-const input = Input.instance
-input.subscribe("BUTTON_DOWN", ActionButton.POINTER, true, (e) => {
-  if (e.hit && e.hit.entityId) {
-    const weaponInfo: WeaponInfo = {
-      colorIndex: WeaponsManager.weaponIndex,
-      position: e.hit.hitPoint,
-      rotation: Quaternion.FromToRotation(Vector3.Up(), e.hit.normal),
-    }
-
-  }
-})
-
-// Inputs
-input.subscribe("BUTTON_DOWN", ActionButton.PRIMARY, true, (e) => {
-  WeaponsManager.nextWeapon()
-  weapon.switchWeaponAnim(WeaponsManager.weaponIndex)
-})
-
-input.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, true, (e) => {
-  WeaponsManager.previousWeapon()
-  weapon.switchWeaponAnim(WeaponsManager.weaponIndex)
-})
-
-
-
