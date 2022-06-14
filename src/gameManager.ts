@@ -67,7 +67,7 @@ const input = Input.instance
 input.subscribe("BUTTON_DOWN", ActionButton.POINTER, true, (e) => {
   if (e.hit && e.hit.entityId) {
     const weaponInfo: WeaponInfo = {
-      colorIndex: WeaponsManager.weaponIndex,
+      colorIndex: weapon.weaponIndex,
       position: e.hit.hitPoint,
       rotation: Quaternion.FromToRotation(Vector3.Up(), e.hit.normal),
     }
@@ -77,13 +77,13 @@ input.subscribe("BUTTON_DOWN", ActionButton.POINTER, true, (e) => {
 
 // Inputs
 input.subscribe("BUTTON_DOWN", ActionButton.PRIMARY, true, (e) => {
-  WeaponsManager.nextWeapon()
-  weapon.switchWeaponAnim(WeaponsManager.weaponIndex)
+  weapon.nextWeapon()
+  weapon.switchWeaponAnim(weapon.weaponIndex)
 })
 
 input.subscribe("BUTTON_DOWN", ActionButton.SECONDARY, true, (e) => {
-  WeaponsManager.previousWeapon()
-  weapon.switchWeaponAnim(WeaponsManager.weaponIndex)
+    weapon.previousWeapon()
+  weapon.switchWeaponAnim(weapon.weaponIndex)
 })
 
 
@@ -217,8 +217,9 @@ export default class GameManager {
 
   setUpInputHandler() {
     this.input.subscribe("BUTTON_DOWN", ActionButton.POINTER, true, (e) => {
-      if (this._isPlayerInShootingArea && this.gunShot) {
+      if (this._isPlayerInShootingArea && (this.gunShot && weapon.getAmmo() > 0 || weapon.getAmmo() === -1)) {
         this.gunShot.getComponent(AudioSource).playOnce();
+        weapon.reduceAmmo();
         const [zombie] = this.zombies.filter((zombie) => zombie.uuid === engine.entities[e.hit.entityId]?.uuid);
 
         if (e.hit.entityId !== undefined && zombie) {

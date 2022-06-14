@@ -1,8 +1,6 @@
 import { setTimeout } from "@dcl/ecs-scene-utils";
-import GameManager from "./gameManager";
-import { Cooldown, Rifle } from "./rifle";
-import { Weapon } from "./weapon";
-import { gunShapes, WeaponsManager } from "./weaponManager";
+import GameManager, { weapon } from "./gameManager";
+import * as ui from "@dcl/ui-scene-utils";
 
 const manager = new GameManager();
 
@@ -97,13 +95,25 @@ function shotgunBox(){
   weaponBox.addComponent(
     new OnPointerDown(
       (e) => {
-          manager.getPoints();
-          clipOpen2.play()
-          purchase.playOnce()
-          setTimeout(3 * 1000, () => {
-            clipClose2.play()
-            //give shotgun
+          const points = manager.getPoints();
+          if (points >= 1000) {
+            clipOpen2.play()
+            purchase.playOnce()
+            weapon.addGun({
+              type: 'shotgun',
+              ammo: 10,
+              shape: new GLTFShape("models/Shotgun.glb"),
+              damage: 50
+            })
+            setTimeout(3 * 1000, () => {
+              clipClose2.play()
+              //give shotgun
             });
+            manager.deductPoints(1000)
+          } else {
+            ui.displayAnnouncement("Need more points to buy Shot gun")
+          }
+
       },
       {
         hoverText: "1000 points for a shotgun",
@@ -140,6 +150,7 @@ function shotgunBox(){
 function machinegunBox(){
   const weaponBox = new Entity('weaponBox')
   engine.addEntity(weaponBox)
+
   weaponBox.setParent(_scene)
   const transform60 = new Transform({
     position: new Vector3(31.5,1.90,23.39),
@@ -155,13 +166,25 @@ function machinegunBox(){
   weaponBox.addComponent(
     new OnPointerDown(
       (e) => {
-
+        const points = manager.getPoints();
+        const pointsNeeded = 3000
+        if (points >= pointsNeeded) {
           clipOpen2.play()
           purchase.playOnce()
+          weapon.addGun({
+            type: 'Machine gun',
+            ammo: 60,
+            shape: new GLTFShape("models/Rifle.glb"),
+            damage: 30
+          })
           setTimeout(3 * 1000, () => {
             clipClose2.play()
             //give shotgun
-            });
+          });
+          manager.deductPoints(pointsNeeded)
+        } else {
+          ui.displayAnnouncement("Need more points to buy Machine gun")
+        }
       },
       {
         hoverText: "3000 points for a machinegun",
