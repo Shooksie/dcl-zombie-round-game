@@ -182,7 +182,7 @@ export default class GameManager {
     //zombie sounds
     let clip = new AudioClip("sounds/die.mp3");
     let dyingSound = new AudioSource(clip);
-    zombie.addComponent(dyingSound);
+    zombie.addComponentOrReplace(dyingSound);
 
     if (this.zombieSystem[zombie.uuid]) {
       engine.removeSystem(this.zombieSystem[zombie.uuid]);
