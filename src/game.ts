@@ -222,7 +222,7 @@ function machinegunBox(){
     new OnPointerDown(
       (e) => {
         const points = manager.getPoints();
-        const pointsNeeded = 3000
+        const pointsNeeded = 1000
         if (points >= pointsNeeded) {
           clipOpen2.play()
           purchase.playOnce()
@@ -242,7 +242,7 @@ function machinegunBox(){
         }
       },
       {
-        hoverText: "3000 points for a machinegun",
+        hoverText: "1000 points for a machinegun",
         distance: 5
       }
     ))
