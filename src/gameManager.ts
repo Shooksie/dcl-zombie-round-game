@@ -6,6 +6,7 @@ import { setTimeout } from "@dcl/ecs-scene-utils";
 import { BulletMark } from './bullet'
 import {Score} from "./score";
 import {Weapon} from "./weapon";
+import { movePlayerTo } from "@decentraland/RestrictedActions";
 import {gunShapes, WeaponsManager} from "./weaponManager";
 const DELETE_TIME = 8 // In seconds
 // Score
@@ -103,6 +104,7 @@ export default class GameManager {
   private points: number;
   private health: number;
   private counter: ui.UICounter;
+  private healthBar: ui.UIBar;
 
   constructor() {
     this.camera = Camera.instance;
@@ -111,6 +113,7 @@ export default class GameManager {
     this.points = 0;
     this.health = 100;
     this.counter = new ui.UICounter(0, -500, 600);
+    this.healthBar = new ui.UIBar(100, 0, 600);
     this.setUpGunShot();
     this.setUpGunShotFail();
 
@@ -135,6 +138,18 @@ export default class GameManager {
         const zombieSystem = new ZombieAttack(zombie, this.camera, {
           moveSpeed: this.moveSpeed,
           rotSpeed: this.rotSpeed,
+          onAttack: () => {
+            log('attack')
+            this.healthBar.decrease(0.1)
+            if (this.healthBar.read() <= 0) {
+              ui.displayAnnouncement("You DEAD!", 5, Color4.Red(), 50);
+              movePlayerTo({ x: 0, y: 1.13, z: 0 });
+              this.healthBar.set(1)
+              this.removeAllZombies();
+              this.round = 1;
+              this.createZombiesForRound();
+            }
+          }
         });
 
         engine.addSystem(zombieSystem);
@@ -183,6 +198,10 @@ export default class GameManager {
     this.gunShotFail.addComponent(new Transform());
     engine.addEntity(this.gunShotFail);
     this.gunShotFail.setParent(Attachable.AVATAR);
+  }
+
+  removeAllZombies() {
+    this.zombies.forEach((zombie) => this.removeZombie(zombie));
   }
 
   setUpInputHandler() {
