@@ -107,6 +107,7 @@ export default class GameManager {
   private counter: ui.UICounter;
   private healthBar: ui.UIBar;
   private pointsLabel: ui.CornerLabel;
+  private ammoLabel: ui.CornerLabel;
 
   constructor() {
     this.camera = Camera.instance;
@@ -116,6 +117,7 @@ export default class GameManager {
     this.health = 100;
     this.counter = new ui.UICounter(0, -40, 580);
     this.pointsLabel = new ui.CornerLabel(`Points: `, -120, 580);
+    this.ammoLabel = new ui.CornerLabel(`Ammo: `, -120, 550);
     this.healthBar = new ui.UIBar(1, -80, 630, Color4.Green(), ui.BarStyles.ROUNDSILVER, 1);
     this.setUpGunShot();
     this.setUpGunShotFail();

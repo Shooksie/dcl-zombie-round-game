@@ -41,7 +41,7 @@ export class Weapon {
     }];
 
     this.gun = new Rifle(this.inventory[0].shape, new Transform())
-    this.ammo = new ui.UICounter(0, 0, 0);
+    this.ammo = new ui.UICounter(0,  -40, 550);
     this.ammo.hide();
     // this.ammo.show();
 
