@@ -10,17 +10,17 @@ export class Zombie extends Entity {
 
     this.addComponent(new Animator());
     this.getComponent(Animator).addClip(
-      new AnimationState("Walking", { looping: true })
+      new AnimationState("walk", { looping: true })
     );
     this.getComponent(Animator).addClip(
-      new AnimationState("Attacking", { looping: true })
+      new AnimationState("attack", { looping: true })
     );
-    this.getComponent(Animator).getClip("Walking").play();
+    this.getComponent(Animator).getClip("walk").play();
   }
 
   // Play attacking animation
   attack() {
-    this.getComponent(Animator).getClip("Attacking").play();
+    this.getComponent(Animator).getClip("attack").play();
   }
 
   hit(damage: number) {
@@ -29,12 +29,12 @@ export class Zombie extends Entity {
 
   // Play walking animation
   walk() {
-    this.getComponent(Animator).getClip("Walking").play();
+    this.getComponent(Animator).getClip("walk").play();
   }
 
   // Bug workaround: otherwise the next animation clip won't play
   stopAnimations() {
-    this.getComponent(Animator).getClip("Walking").stop();
-    this.getComponent(Animator).getClip("Attacking").stop();
+    this.getComponent(Animator).getClip("walk").stop();
+    this.getComponent(Animator).getClip("attack").stop();
   }
 }
