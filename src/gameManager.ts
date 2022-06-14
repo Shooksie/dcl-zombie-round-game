@@ -152,7 +152,7 @@ export default class GameManager {
             attackSound.playOnce();
             this.healthBar.decrease(0.1)
             if (this.healthBar.read() <= 0) {
-              ui.displayAnnouncement("You DEAD!", 5, Color4.Red(), 50);
+              ui.displayAnnouncement("You died!", 5, Color4.Red(), 50);
               movePlayerTo({ x: 22.51, y: 0, z: 13.92 });
               this.healthBar.set(1)
               this.removeAllZombies();
