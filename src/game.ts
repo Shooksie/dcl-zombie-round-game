@@ -3,8 +3,31 @@ import GameManager from "./gameManager";
 import { Cooldown, Rifle } from "./rifle";
 import { Weapon } from "./weapon";
 import { gunShapes, WeaponsManager } from "./weaponManager";
+import * as ui from "@dcl/ui-scene-utils";
 
 const manager = new GameManager();
+
+let Inventory = new ui.CenterImage('images/UI.png', 3, true, 0, 0, 750, 750, {
+  sourceHeight: 750,
+  sourceWidth: 750,
+  sourceLeft: 0,
+  sourceTop: 0
+})
+ Inventory.show()
+
+ const modArea = new Entity()
+ modArea.addComponent(
+   new CameraModeArea({
+     area: { box: new Vector3(32, 6, 32) },
+     cameraMode: CameraMode.FirstPerson,
+   })
+ )
+ modArea.addComponent(
+   new Transform({
+     position: new Vector3(16, 3, 16),
+   })
+ )
+ engine.addEntity(modArea)
 
 //Build scene
 const _scene = new Entity('_scene')

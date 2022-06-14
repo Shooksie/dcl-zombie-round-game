@@ -105,6 +105,7 @@ export default class GameManager {
   private health: number;
   private counter: ui.UICounter;
   private healthBar: ui.UIBar;
+  private pointsLabel: ui.CornerLabel;
 
   constructor() {
     this.camera = Camera.instance;
@@ -112,8 +113,9 @@ export default class GameManager {
     this._isPlayerInShootingArea = true;
     this.points = 0;
     this.health = 100;
-    this.counter = new ui.UICounter(0, -500, 600);
-    this.healthBar = new ui.UIBar(100, 0, 600);
+    this.counter = new ui.UICounter(0, -40, 580);
+    this.pointsLabel = new ui.CornerLabel(`Points: `, -120, 580);
+    this.healthBar = new ui.UIBar(1, -80, 630, Color4.Green(), ui.BarStyles.ROUNDSILVER, 1);
     this.setUpGunShot();
     this.setUpGunShotFail();
 
@@ -143,7 +145,7 @@ export default class GameManager {
             this.healthBar.decrease(0.1)
             if (this.healthBar.read() <= 0) {
               ui.displayAnnouncement("You DEAD!", 5, Color4.Red(), 50);
-              movePlayerTo({ x: 0, y: 1.13, z: 0 });
+              movePlayerTo({ x: 22.51, y: 0, z: 13.92 }); 
               this.healthBar.set(1)
               this.removeAllZombies();
               this.round = 1;
