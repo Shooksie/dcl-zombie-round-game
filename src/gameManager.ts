@@ -137,7 +137,7 @@ export default class GameManager {
       setTimeout(Math.round(i * 1.5) * 2000, () => {
         log("create zombie for round");
         const zombie = new Zombie(
-          new GLTFShape("models/old_gnark.glb"),
+          new GLTFShape("models/Zombie.glb"),
           new Transform({
             position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
           })
