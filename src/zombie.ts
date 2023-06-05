@@ -2,7 +2,7 @@ export class Zombie extends Entity {
   health: number;
   constructor(model: GLTFShape, transform: Transform) {
     super();
-    log('adding zombie to engine')
+    log("adding zombie to engine");
     engine.addEntity(this);
     this.addComponent(model);
     this.addComponent(transform);
@@ -24,7 +24,7 @@ export class Zombie extends Entity {
   }
 
   hit(damage: number) {
-   this.health -= damage;
+    this.health -= damage;
   }
 
   // Play walking animation

@@ -8,6 +8,15 @@ import { Score } from "./score";
 import { Weapon } from "./weapon";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
 import { gunShapes, WeaponsManager } from "./weaponManager";
+import { highestRoundCounterLabel, roundCounterLabel } from "./roundLabel";
+
+// LEADER BOARD
+import {
+  getPlayerRounds,
+  createPlayerRounds,
+  updatePlayerRounds,
+} from "./api/api";
+
 const DELETE_TIME = 8; // In seconds
 // Score
 const scoreTen = new Score(
@@ -97,21 +106,27 @@ export default class GameManager {
   private zombieSystem: ZombieAttackMap = {};
   private finishedRendering: boolean;
   private points: number;
+  private kills: number;
   private health: number;
   private counter: ui.UICounter;
+  private killCounter: ui.UICounter;
   private healthBar: ui.UIBar;
   private pointsLabel: ui.CornerLabel;
   private ammoLabel: ui.CornerLabel;
+  private killsLabel: ui.CornerLabel;
 
   constructor() {
     this.camera = Camera.instance;
     this.input = Input.instance;
     this._isPlayerInShootingArea = true;
     this.points = 0;
+    this.kills = 0;
     this.health = 100;
     this.counter = new ui.UICounter(0, -40, 580);
+    this.killCounter = new ui.UICounter(0, -40, 520);
     this.pointsLabel = new ui.CornerLabel(`Points: `, -120, 580);
     this.ammoLabel = new ui.CornerLabel(`Ammo: `, -120, 550);
+    this.killsLabel = new ui.CornerLabel(`Kills: `, -120, 520);
     this.healthBar = new ui.UIBar(
       1,
       -80,
@@ -124,11 +139,16 @@ export default class GameManager {
     this.setUpGunShotFail();
 
     this.setUpInputHandler();
-    this.createZombiesForRound();
+    setTimeout(3 * 1000, () => {
+      this.createZombiesForRound();
+    });
   }
 
-  createZombiesForRound() {
-    ui.displayAnnouncement(`round started ${this.round}`);
+  async createZombiesForRound() {
+    const response = await getPlayerRounds();
+    ui.displayAnnouncement(`Round ${this.round}`);
+    roundCounterLabel.value = `Round: ${this.round}`;
+    highestRoundCounterLabel.value = `Highest Round: ${response.zombies_leader_board[0].rounds}`;
     //let roundLabel = new ui.CornerLabel(`Round: ${this.round}`, -120, 530);
     this.finishedRendering = false;
     let count = 0;
@@ -151,19 +171,49 @@ export default class GameManager {
         const zombieSystem = new ZombieAttack(zombie, this.camera, {
           moveSpeed: this.moveSpeed,
           rotSpeed: this.rotSpeed,
-          onAttack: () => {
+          onAttack: async () => {
             log("attack");
             attackSound.playOnce();
             this.healthBar.decrease(0.1);
             if (this.healthBar.read() <= 0) {
               ui.displayAnnouncement("GAME OVER!", 5, Color4.Red(), 50);
+              // get th current round and compaare with db rounds by player & save again just in case//
+              //const response = await getPlayerRounds();
+              log("GEt Player Rouds>>>>", response);
+
+              if (
+                response.zombies_leader_board &&
+                response.zombies_leader_board.length === 0
+              ) {
+                // create new entries for player
+
+                const resopnse2 = await createPlayerRounds(this.round);
+              } else {
+                // update
+
+                //{"zombies_leader_board":[{"rounds":1}]}
+                log(
+                  "player rounds>>>",
+                  response.zombies_leader_board[0].rounds
+                );
+
+                if (this.round > response.zombies_leader_board[0].rounds) {
+                  const response3 = await updatePlayerRounds(this.round);
+                  highestRoundCounterLabel.value = `Highest Round: ${response.zombies_leader_board[0].rounds}`;
+
+                  log("rounds updateD", response3);
+                }
+              }
+              log("current Player Rounds>>>", this.round);
 
               movePlayerTo({ x: 22.51, y: 0, z: 13.92 });
               this.healthBar.set(1);
               this.removeAllZombies();
               this.round = 1;
               this.points = 0;
+              this.kills = 0;
               this.counter.set(this.points);
+              this.killCounter.set(this.kills);
               this.createZombiesForRound();
             }
           },
@@ -257,11 +307,15 @@ export default class GameManager {
             this.score(50, e.hit.hitPoint); // Play score animation
             this.removeZombie(zombie);
             this.points += 50;
+            this.kills += 1;
           } else {
             this.score(10, e.hit.hitPoint); // Play score animation
             this.points += 10;
           }
           this.counter.set(this.points);
+          this.killCounter.set(this.kills);
+
+          // we can make api call to add points into db for that player.
         } else if (engine.entities[e.hit.entityId] !== undefined) {
           // Calculate the position of where the bullet hits relative to the target
           const targetPosition =

@@ -1,6 +1,10 @@
 import { setTimeout } from "@dcl/ecs-scene-utils";
 import GameManager, { weapon } from "./gameManager";
 import * as ui from "@dcl/ui-scene-utils";
+import { canvas } from "@dcl/ui-scene-utils";
+import { dungeonInfoExitButton, dungeonInfoNightmare } from "./ui";
+import { getUserData } from "@decentraland/Identity";
+import { GetPlayerLandedLogs, LogPlayerLanded } from "./api/api";
 
 const manager = new GameManager();
 
@@ -28,228 +32,168 @@ const screen = new Entity();
 screen.addComponent(new PlaneShape());
 screen.addComponent(
   new Transform({
-    position: new Vector3(19.17,0.90,11.62),
-    rotation: new Quaternion(2.806811489129799e-16, 0.7033095216751099, -8.5629160651024e-8, 0.6957237720489502),
-    scale: new Vector3(.0001, .0001, .0001)
+    position: new Vector3(19.17, 0.9, 11.62),
+    rotation: new Quaternion(
+      2.806811489129799e-16,
+      0.7033095216751099,
+      -8.5629160651024e-8,
+      0.6957237720489502
+    ),
+    scale: new Vector3(0.0001, 0.0001, 0.0001),
   })
 );
 screen.addComponent(myMaterial);
 
 engine.addEntity(screen);
 
-let Inventory = new ui.CenterImage('images/UI.png', 3, true, 0, 0, 750, 750, {
+let Inventory = new ui.CenterImage("images/UI.png", 3, true, 0, 0, 750, 750, {
   sourceHeight: 750,
   sourceWidth: 750,
   sourceLeft: 0,
-  sourceTop: 0
-})
- Inventory.show()
+  sourceTop: 0,
+});
+//Inventory.show();
+dungeonInfoNightmare.show();
+dungeonInfoExitButton.show();
 
- const modArea = new Entity()
- modArea.addComponent(
-   new CameraModeArea({
-     area: { box: new Vector3(32, 6, 32) },
-     cameraMode: CameraMode.FirstPerson,
-   })
- )
- modArea.addComponent(
-   new Transform({
-     position: new Vector3(16, 3, 16),
-   })
- )
- engine.addEntity(modArea)
+const modArea = new Entity();
+modArea.addComponent(
+  new CameraModeArea({
+    area: { box: new Vector3(32, 6, 32) },
+    cameraMode: CameraMode.FirstPerson,
+  })
+);
+modArea.addComponent(
+  new Transform({
+    position: new Vector3(16, 3, 16),
+  })
+);
+engine.addEntity(modArea);
 
 //Build scene
-const _scene = new Entity('_scene')
-engine.addEntity(_scene)
+const _scene = new Entity("_scene");
+engine.addEntity(_scene);
 const transform = new Transform({
   position: new Vector3(0, 0, 0),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
-})
-_scene.addComponentOrReplace(transform)
+  scale: new Vector3(1, 1, 1),
+});
+_scene.addComponentOrReplace(transform);
 
-const entity = new Entity('entity')
-engine.addEntity(entity)
-entity.setParent(_scene)
-const gltfShape = new GLTFShape("c9b17021-765c-4d9a-9966-ce93a9c323d1/FloorBaseGrass_01/FloorBaseGrass_01.glb")
-gltfShape.withCollisions = true
-gltfShape.isPointerBlocker = true
-gltfShape.visible = true
-entity.addComponentOrReplace(gltfShape)
+const entity = new Entity("entity");
+engine.addEntity(entity);
+entity.setParent(_scene);
+const gltfShape = new GLTFShape(
+  "c9b17021-765c-4d9a-9966-ce93a9c323d1/FloorBaseGrass_01/FloorBaseGrass_01.glb"
+);
+gltfShape.withCollisions = true;
+gltfShape.isPointerBlocker = true;
+gltfShape.visible = true;
+entity.addComponentOrReplace(gltfShape);
 const transform2 = new Transform({
   position: new Vector3(8, 0, 8),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
-})
-entity.addComponentOrReplace(transform2)
+  scale: new Vector3(1, 1, 1),
+});
+entity.addComponentOrReplace(transform2);
 
-const entity2 = new Entity('entity2')
-engine.addEntity(entity2)
-entity2.setParent(_scene)
-entity2.addComponentOrReplace(gltfShape)
+const entity2 = new Entity("entity2");
+engine.addEntity(entity2);
+entity2.setParent(_scene);
+entity2.addComponentOrReplace(gltfShape);
 const transform3 = new Transform({
   position: new Vector3(24, 0, 8),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
-})
-entity2.addComponentOrReplace(transform3)
+  scale: new Vector3(1, 1, 1),
+});
+entity2.addComponentOrReplace(transform3);
 
-const entity3 = new Entity('entity3')
-engine.addEntity(entity3)
-entity3.setParent(_scene)
-entity3.addComponentOrReplace(gltfShape)
+const entity3 = new Entity("entity3");
+engine.addEntity(entity3);
+entity3.setParent(_scene);
+entity3.addComponentOrReplace(gltfShape);
 const transform4 = new Transform({
   position: new Vector3(8, 0, 24),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
-})
-entity3.addComponentOrReplace(transform4)
+  scale: new Vector3(1, 1, 1),
+});
+entity3.addComponentOrReplace(transform4);
 
-const entity4 = new Entity('entity4')
-engine.addEntity(entity4)
-entity4.setParent(_scene)
-entity4.addComponentOrReplace(gltfShape)
+const entity4 = new Entity("entity4");
+engine.addEntity(entity4);
+entity4.setParent(_scene);
+entity4.addComponentOrReplace(gltfShape);
 const transform5 = new Transform({
   position: new Vector3(24, 0, 24),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
-})
-entity4.addComponentOrReplace(transform5)
+  scale: new Vector3(1, 1, 1),
+});
+entity4.addComponentOrReplace(transform5);
 
-const zombiehouse = new Entity('zombiehouse')
-engine.addEntity(zombiehouse)
-zombiehouse.setParent(_scene)
+const zombiehouse = new Entity("zombiehouse");
+engine.addEntity(zombiehouse);
+zombiehouse.setParent(_scene);
 const transform6 = new Transform({
-  position: new Vector3(8, 0.010, 13.2),
+  position: new Vector3(8, 0.01, 13.2),
   rotation: new Quaternion(0, 0, 0, 1),
-  scale: new Vector3(1, 1, 1)
-})
-zombiehouse.addComponentOrReplace(transform6)
-const gltfShape2 = new GLTFShape("d4ea110e-f3c2-4044-87fa-6143d6f7f67c/Zombiehouse.glb")
-gltfShape2.withCollisions = true
-gltfShape2.isPointerBlocker = true
-gltfShape2.visible = true
-zombiehouse.addComponentOrReplace(gltfShape2)
+  scale: new Vector3(1, 1, 1),
+});
+zombiehouse.addComponentOrReplace(transform6);
+const gltfShape2 = new GLTFShape(
+  "d4ea110e-f3c2-4044-87fa-6143d6f7f67c/Zombiehouse.glb"
+);
+gltfShape2.withCollisions = true;
+gltfShape2.isPointerBlocker = true;
+gltfShape2.visible = true;
+zombiehouse.addComponentOrReplace(gltfShape2);
 
-function shotgunBox(){
-  const weaponBox = new Entity('weaponBox')
-  engine.addEntity(weaponBox)
-  weaponBox.setParent(_scene)
+function shotgunBox() {
+  const weaponBox = new Entity("weaponBox");
+  engine.addEntity(weaponBox);
+  weaponBox.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(15.60,1.9,23.81),
+    position: new Vector3(15.6, 1.9, 23.81),
     rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  weaponBox.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/ShotgunB.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  weaponBox.addComponentOrReplace(gltfShape20)
-  weaponBox.addComponent(
-    new OnPointerDown(
-      (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            clipOpen2.play()
-            purchase.playOnce()
-            weapon.addGun({
-              type: 'shotgun',
-              ammo: 10,
-              shape: new GLTFShape("models/Shotgun.glb"),
-              damage: 50
-            })
-            setTimeout(3 * 1000, () => {
-              clipClose2.play()
-              //give shotgun
-            });
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy Shot gun")
-          }
-
-      },
-      {
-        hoverText: "1000 points for a shotgun",
-        distance: 5
-      }
-    ))
-    let d2animator = new Animator()
-
-  // Add animator component to the entity
-  weaponBox.addComponent(d2animator)
-
-  // Instance animation clip object
-  const clipOpen2 = new AnimationState("open", { looping: false });
-  const clipClose2 = new AnimationState("closed", { looping: false });
-  const idleClip2 = new AnimationState("idle", { looping: false });
-
-  // Add animation clip to Animator component
-  d2animator.addClip(clipOpen2)
-  d2animator.addClip(clipClose2)
-  d2animator.addClip(idleClip2)
-
-  // Add entity to engine
-  engine.addEntity(weaponBox)
-
-  //Default Animation
-  idleClip2.play();
-
-  //add sound
-  let clip = new AudioClip("sounds/sale.mp3");
-  let purchase = new AudioSource(clip);
-  weaponBox.addComponent(purchase)
-}
-
-function machinegunBox(){
-  const weaponBox = new Entity('weaponBox')
-  engine.addEntity(weaponBox)
-
-  weaponBox.setParent(_scene)
-  const transform60 = new Transform({
-    position: new Vector3(31.5,1.90,23.39),
-    rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  weaponBox.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/RifleB.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  weaponBox.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  weaponBox.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/ShotgunB.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  weaponBox.addComponentOrReplace(gltfShape20);
   weaponBox.addComponent(
     new OnPointerDown(
       (e) => {
         const points = manager.getPoints();
-        const pointsNeeded = 1000
-        if (points >= pointsNeeded) {
-          clipOpen2.play()
-          purchase.playOnce()
+        if (points >= 1000) {
+          clipOpen2.play();
+          purchase.playOnce();
           weapon.addGun({
-            type: 'Machine gun',
-            ammo: 60,
-            shape: new GLTFShape("models/Rifle.glb"),
-            damage: 30
-          })
+            type: "shotgun",
+            ammo: 10,
+            shape: new GLTFShape("models/Shotgun.glb"),
+            damage: 50,
+          });
           setTimeout(3 * 1000, () => {
-            clipClose2.play()
+            clipClose2.play();
             //give shotgun
           });
-          manager.deductPoints(pointsNeeded)
+          manager.deductPoints(1000);
         } else {
-          ui.displayAnnouncement("Need more points to buy Machine gun")
+          ui.displayAnnouncement("Need more points to buy Shot gun");
         }
       },
       {
-        hoverText: "1000 points for a machinegun",
-        distance: 5
+        hoverText: "1000 points for a shotgun",
+        distance: 5,
       }
-    ))
-    let d2animator = new Animator()
+    )
+  );
+  let d2animator = new Animator();
 
   // Add animator component to the entity
-  weaponBox.addComponent(d2animator)
+  weaponBox.addComponent(d2animator);
 
   // Instance animation clip object
   const clipOpen2 = new AnimationState("open", { looping: false });
@@ -257,300 +201,371 @@ function machinegunBox(){
   const idleClip2 = new AnimationState("idle", { looping: false });
 
   // Add animation clip to Animator component
-  d2animator.addClip(clipOpen2)
-  d2animator.addClip(clipClose2)
-  d2animator.addClip(idleClip2)
+  d2animator.addClip(clipOpen2);
+  d2animator.addClip(clipClose2);
+  d2animator.addClip(idleClip2);
 
   // Add entity to engine
-  engine.addEntity(weaponBox)
+  engine.addEntity(weaponBox);
 
   //Default Animation
   idleClip2.play();
 
-    //add sound
-    let clip = new AudioClip("sounds/sale.mp3");
-    let purchase = new AudioSource(clip);
-    weaponBox.addComponent(purchase)
+  //add sound
+  let clip = new AudioClip("sounds/sale.mp3");
+  let purchase = new AudioSource(clip);
+  weaponBox.addComponent(purchase);
 }
 
+function machinegunBox() {
+  const weaponBox = new Entity("weaponBox");
+  engine.addEntity(weaponBox);
 
+  weaponBox.setParent(_scene);
+  const transform60 = new Transform({
+    position: new Vector3(31.5, 1.9, 23.39),
+    rotation: new Quaternion(0, 0, 0, 1),
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  weaponBox.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/RifleB.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  weaponBox.addComponentOrReplace(gltfShape20);
+  weaponBox.addComponent(
+    new OnPointerDown(
+      (e) => {
+        const points = manager.getPoints();
+        const pointsNeeded = 1000;
+        if (points >= pointsNeeded) {
+          clipOpen2.play();
+          purchase.playOnce();
+          weapon.addGun({
+            type: "Machine gun",
+            ammo: 60,
+            shape: new GLTFShape("models/Rifle.glb"),
+            damage: 30,
+          });
+          setTimeout(3 * 1000, () => {
+            clipClose2.play();
+            //give shotgun
+          });
+          manager.deductPoints(pointsNeeded);
+        } else {
+          ui.displayAnnouncement("Need more points to buy Machine gun");
+        }
+      },
+      {
+        hoverText: "1000 points for a machinegun",
+        distance: 5,
+      }
+    )
+  );
+  let d2animator = new Animator();
+
+  // Add animator component to the entity
+  weaponBox.addComponent(d2animator);
+
+  // Instance animation clip object
+  const clipOpen2 = new AnimationState("open", { looping: false });
+  const clipClose2 = new AnimationState("closed", { looping: false });
+  const idleClip2 = new AnimationState("idle", { looping: false });
+
+  // Add animation clip to Animator component
+  d2animator.addClip(clipOpen2);
+  d2animator.addClip(clipClose2);
+  d2animator.addClip(idleClip2);
+
+  // Add entity to engine
+  engine.addEntity(weaponBox);
+
+  //Default Animation
+  idleClip2.play();
+
+  //add sound
+  let clip = new AudioClip("sounds/sale.mp3");
+  let purchase = new AudioSource(clip);
+  weaponBox.addComponent(purchase);
+}
 
 shotgunBox();
 machinegunBox();
 
-function door1(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door1() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(9.61,1,11.30),
+    position: new Vector3(9.61, 1, 11.3),
     rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
-function door2(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door2() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(23.73,.95,11.3),
+    position: new Vector3(23.73, 0.95, 11.3),
     rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
-function door3(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door3() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(18.83,.95,11.3),
+    position: new Vector3(18.83, 0.95, 11.3),
     rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
-function door4(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door4() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(13.2,0.90,21.1),
+    position: new Vector3(13.2, 0.9, 21.1),
     rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
-function door5(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door5() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(20.2,0.90,21.1),
+    position: new Vector3(20.2, 0.9, 21.1),
     rotation: new Quaternion(0, 0, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
-function door6(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door6() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(25.9,0.90,15.5),
+    position: new Vector3(25.9, 0.9, 15.5),
     rotation: new Quaternion(0, 1, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
-function door7(){
-  const payDoor = new Entity('door')
-  engine.addEntity(payDoor)
-  payDoor.setParent(_scene)
+function door7() {
+  const payDoor = new Entity("door");
+  engine.addEntity(payDoor);
+  payDoor.setParent(_scene);
   const transform60 = new Transform({
-    position: new Vector3(6.2,0.90,15.5),
+    position: new Vector3(6.2, 0.9, 15.5),
     rotation: new Quaternion(0, 1, 0, 1),
-    scale: new Vector3(.5, .5, .5)
-  })
-  payDoor.addComponentOrReplace(transform60)
-  const gltfShape20 = new GLTFShape("models/irondoor.glb")
-  gltfShape20.withCollisions = true
-  gltfShape20.isPointerBlocker = true
-  gltfShape20.visible = true
-  payDoor.addComponentOrReplace(gltfShape20)
+    scale: new Vector3(0.5, 0.5, 0.5),
+  });
+  payDoor.addComponentOrReplace(transform60);
+  const gltfShape20 = new GLTFShape("models/irondoor.glb");
+  gltfShape20.withCollisions = true;
+  gltfShape20.isPointerBlocker = true;
+  gltfShape20.visible = true;
+  payDoor.addComponentOrReplace(gltfShape20);
   payDoor.addComponent(
     new OnPointerDown(
       (e) => {
-          const points = manager.getPoints();
-          if (points >= 1000) {
-            engine.removeEntity(payDoor);
-            
-            manager.deductPoints(1000)
-          } else {
-            ui.displayAnnouncement("Need more points to buy this door")
-          }
+        const points = manager.getPoints();
+        if (points >= 1000) {
+          engine.removeEntity(payDoor);
 
+          manager.deductPoints(1000);
+        } else {
+          ui.displayAnnouncement("Need more points to buy this door");
+        }
       },
       {
         hoverText: "1000 points for a the door",
-        distance: 4
+        distance: 4,
       }
-    ))
-    
+    )
+  );
+
   //add sound
   let clip = new AudioClip("sounds/sale.mp3");
   let purchase = new AudioSource(clip);
-  payDoor.addComponent(purchase)
+  payDoor.addComponent(purchase);
 }
+
 door1();
 door2();
 door3();

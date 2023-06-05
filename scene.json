@@ -1,4 +1,7 @@
 {
+     "worldConfiguration" : {
+          "name": "hide.dcl.eth"
+        },
   "display": {
     "title": "DCL Zombies",
     "description": "DCL Zombies",
