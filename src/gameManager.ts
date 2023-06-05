@@ -148,7 +148,15 @@ export default class GameManager {
     const response = await getPlayerRounds();
     ui.displayAnnouncement(`Round ${this.round}`);
     roundCounterLabel.value = `Round: ${this.round}`;
-    highestRoundCounterLabel.value = `Highest Round: ${response.zombies_leader_board[0].rounds}`;
+    if (
+      response.zombies_leader_board &&
+      response.zombies_leader_board.length === 0
+    ) {
+      highestRoundCounterLabel.value = `Highest Round: 0`;
+    } else {
+      highestRoundCounterLabel.value = `Highest Round: ${response.zombies_leader_board[0].rounds}`;
+    }
+
     //let roundLabel = new ui.CornerLabel(`Round: ${this.round}`, -120, 530);
     this.finishedRendering = false;
     let count = 0;
