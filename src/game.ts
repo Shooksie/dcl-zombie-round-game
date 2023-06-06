@@ -1,10 +1,7 @@
 import { setTimeout } from "@dcl/ecs-scene-utils";
 import GameManager, { weapon } from "./gameManager";
 import * as ui from "@dcl/ui-scene-utils";
-import { canvas } from "@dcl/ui-scene-utils";
-import { dungeonInfoExitButton, dungeonInfoNightmare } from "./ui";
-import { getUserData } from "@decentraland/Identity";
-import { GetPlayerLandedLogs, LogPlayerLanded } from "./api/api";
+import { startingInfo, startingInfoExitButton } from "./ui";
 
 const manager = new GameManager();
 
@@ -46,15 +43,8 @@ screen.addComponent(myMaterial);
 
 engine.addEntity(screen);
 
-let Inventory = new ui.CenterImage("images/UI.png", 3, true, 0, 0, 750, 750, {
-  sourceHeight: 750,
-  sourceWidth: 750,
-  sourceLeft: 0,
-  sourceTop: 0,
-});
-//Inventory.show();
-dungeonInfoNightmare.show();
-dungeonInfoExitButton.show();
+startingInfo.show();
+startingInfoExitButton.show();
 
 const modArea = new Entity();
 modArea.addComponent(

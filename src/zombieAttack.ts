@@ -1,10 +1,9 @@
-import { Zombie } from "./zombie";
+import { Zombie } from "./zombies/zombie";
 import castRay from "./raycast";
 
 // Configuration
 const MOVE_SPEED = 1;
 const ROT_SPEED = 1;
-
 
 interface ZombieAttackConfig {
   moveSpeed?: number;
@@ -25,14 +24,18 @@ export class ZombieAttack implements ISystem {
   constructor(
     zombie: Zombie,
     player: Camera,
-    { moveSpeed = MOVE_SPEED, rotSpeed = ROT_SPEED, onAttack }: ZombieAttackConfig = {}
+    {
+      moveSpeed = MOVE_SPEED,
+      rotSpeed = ROT_SPEED,
+      onAttack,
+    }: ZombieAttackConfig = {}
   ) {
     this.zombie = zombie;
     this.transform = zombie.getComponent(Transform);
     this.player = player;
     this.moveSpeed = moveSpeed;
     this.rotSpeed = rotSpeed;
-    this.onAttack = onAttack
+    this.onAttack = onAttack;
     this.createdAt = new Date();
     this.refreshTimer = 0;
   }
@@ -40,7 +43,7 @@ export class ZombieAttack implements ISystem {
   async update(dt: number) {
     if (this.refreshTimer > 0) {
       log(this.refreshTimer);
-      this.refreshTimer -= dt
+      this.refreshTimer -= dt;
     }
     // Rotate to face the player
     const lookAtTarget = new Vector3(
@@ -61,14 +64,18 @@ export class ZombieAttack implements ISystem {
     //   log((new Date().getTime() - this.createdAt.getTime()) /1000 )
     //   log(e, dt)
     // }
-    const diff = Math.round((new Date().getTime() - this.createdAt.getTime()) / 1000)
-    if (!(e.didHit && e?.entities[0]?.entity?.entityId !== this.zombie.uuid) || diff <= 5) {
+    const diff = Math.round(
+      (new Date().getTime() - this.createdAt.getTime()) / 1000
+    );
+    if (
+      !(e.didHit && e?.entities[0]?.entity?.entityId !== this.zombie.uuid) ||
+      diff <= 5
+    ) {
       const distance = Vector3.DistanceSquared(
-          this.transform.position,
-          this.player.position
+        this.transform.position,
+        this.player.position
       ); // Check distance squared as it's more optimized
       if (distance >= 4) {
-
         // Note: Distance is squared so a value of 4 is when the zombie is standing 2m away
         this.zombie.walk();
         const forwardVector = Vector3.Forward().rotate(this.transform.rotation);

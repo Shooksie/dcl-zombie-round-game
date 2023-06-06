@@ -1,4 +1,4 @@
-import { Zombie } from "./zombie";
+import { Zombie } from "./zombies/zombie";
 import { ZombieAttack } from "./zombieAttack";
 import * as ui from "@dcl/ui-scene-utils";
 import * as utils from "@dcl/ecs-scene-utils";
@@ -16,6 +16,8 @@ import {
   createPlayerRounds,
   updatePlayerRounds,
 } from "./api/api";
+import { FastZombie } from "./zombies/fastZombie";
+import { TankZombie } from "./zombies/tankZombie";
 
 const DELETE_TIME = 8; // In seconds
 // Score
@@ -152,7 +154,7 @@ export default class GameManager {
       response.zombies_leader_board &&
       response.zombies_leader_board.length === 0
     ) {
-      highestRoundCounterLabel.value = `Highest Round: 0`;
+      highestRoundCounterLabel.value = `Highest Round: 1`;
     } else {
       highestRoundCounterLabel.value = `Highest Round: ${response.zombies_leader_board[0].rounds}`;
     }
@@ -164,12 +166,40 @@ export default class GameManager {
     for (let i = 1; i <= target; i++) {
       setTimeout(Math.round(i * 1.5) * 2000, () => {
         log("create zombie for round");
-        const zombie = new Zombie(
-          new GLTFShape("models/Zombie.glb"),
-          new Transform({
-            position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
-          })
-        );
+
+        let zombie;
+        if (this.round % 5 === 0) {
+          // Every 5 rounds create a strong zombie
+          zombie = new TankZombie(
+            new GLTFShape("models/StrongZombie.glb"),
+            new Transform({
+              position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
+            })
+          );
+        } else if (this.round % 3 === 0) {
+          // Every 3 rounds create a fast zombie
+          zombie = new FastZombie(
+            new GLTFShape("models/Oligar.glb"),
+            4,
+            new Transform({
+              position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
+            })
+          );
+        } else {
+          zombie = new Zombie(
+            new GLTFShape("models/Zombie.glb"),
+            new Transform({
+              position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
+            })
+          );
+        }
+
+        // const zombie = new Zombie(
+        //   new GLTFShape("models/Zombie.glb"),
+        //   new Transform({
+        //     position: POSITIONS[getRandomInt(POSITIONS.length)]?.clone(),
+        //   })
+        // );
 
         //zombie sounds
         let clip2 = new AudioClip("sounds/attack.mp3");
@@ -186,7 +216,6 @@ export default class GameManager {
             if (this.healthBar.read() <= 0) {
               ui.displayAnnouncement("GAME OVER!", 5, Color4.Red(), 50);
               // get th current round and compaare with db rounds by player & save again just in case//
-              //const response = await getPlayerRounds();
               log("GEt Player Rouds>>>>", response);
 
               if (

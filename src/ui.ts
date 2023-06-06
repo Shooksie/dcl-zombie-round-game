@@ -1,10 +1,8 @@
 import { setTimeout } from "@dcl/ecs-scene-utils";
 import { canvas } from "@dcl/ui-scene-utils";
-import gameManager from "./gameManager";
-import GameManager from "./gameManager";
 
 //dungeon info
-export class DungeonInfo {
+export class StartingInfo {
   private card: UIImage;
 
   constructor(texturePath: string) {
@@ -28,15 +26,15 @@ export class DungeonInfo {
 
   public show() {
     this.card.visible = true;
-    setTimeout(20 * 1000, () => {
+    setTimeout(10 * 1000, () => {
       this.card.visible = false;
     });
   }
 }
 
-export const dungeonInfoNightmare = new DungeonInfo("images/nightmare.png");
+export const startingInfo = new StartingInfo("images/nightmare.png");
 
-export class DungeonInfoExit {
+export class StartingInfoExit {
   private card: UIImage;
 
   constructor() {
@@ -53,14 +51,17 @@ export class DungeonInfoExit {
     this.card.visible = false;
     this.card.isPointerBlocker = true;
     this.card.onClick = new OnPointerDown(() => {
-      dungeonInfoNightmare.hide();
+      startingInfo.hide();
       this.card.visible = false;
     });
   }
 
   public show() {
     this.card.visible = true;
+    setTimeout(10 * 1000, () => {
+      this.card.visible = false;
+    });
   }
 }
 
-export const dungeonInfoExitButton = new DungeonInfoExit();
+export const startingInfoExitButton = new StartingInfoExit();
